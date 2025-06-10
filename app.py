@@ -57,6 +57,57 @@ def basic_calculation(p, v, q, f, g):
     
     return p, v, q, f, g, m, pq, vq, mq
 
+def display_basic_results(p, v, q, f, g, title="Results", show_ratios=True):
+    """Basic計算結果を表示する共通関数"""
+    m = p - v
+    pq = p * q
+    vq = v * q
+    mq = m * q
+    
+    st.subheader(title)
+    
+    if show_ratios:
+        col1, col2, col3 = st.columns(3)
+    else:
+        col1, col2 = st.columns(2)
+    
+    with col1:
+        st.write("**Primary Values**")
+        st.metric("P", f"{p:.1f}")
+        st.metric("V", f"{v:.1f}")
+        st.metric("M", f"{m:.1f}")
+        st.metric("Q", f"{q:.1f}")
+    
+    with col2:
+        st.write("**Products**") 
+        st.metric("PQ", f"{pq:.1f}")
+        st.metric("VQ", f"{vq:.1f}")
+        st.metric("MQ", f"{mq:.1f}")
+        st.metric("F", f"{f:.1f}")
+        st.metric("G", f"{g:.1f}")
+    
+    if show_ratios:
+        with col3:
+            st.write("**Ratios**")
+            v_percent = v / p * 100 if p != 0 else "undefined"
+            fm_percent = f / mq * 100 if mq != 0 else "undefined"
+            q0 = f / m if m != 0 else "undefined"
+            
+            if isinstance(v_percent, float):
+                st.metric("V%", f"{v_percent:.1f}%")
+            else:
+                st.metric("V%", v_percent)
+            
+            if isinstance(fm_percent, float):
+                st.metric("FM", f"{fm_percent:.1f}%")
+            else:
+                st.metric("FM", fm_percent)
+            
+            if isinstance(q0, float):
+                st.metric("Q0", f"{q0:.1f}")
+            else:
+                st.metric("Q0", q0)
+
 def main():
     st.title("🧮 STRAC Calculator")
     
@@ -96,43 +147,7 @@ def main():
             st.session_state.current_values = {'p': p, 'v': v, 'q': q, 'f': f, 'g': g}
             
             # 結果表示
-            col1, col2, col3 = st.columns(3)
-            
-            with col1:
-                st.subheader("Primary Values")
-                st.metric("P", f"{p:.1f}")
-                st.metric("V", f"{v:.1f}")
-                st.metric("M", f"{m:.1f}")
-                st.metric("Q", f"{q:.1f}")
-            
-            with col2:
-                st.subheader("Products") 
-                st.metric("PQ", f"{pq:.1f}")
-                st.metric("VQ", f"{vq:.1f}")
-                st.metric("MQ", f"{mq:.1f}")
-                st.metric("F", f"{f:.1f}")
-                st.metric("G", f"{g:.1f}")
-            
-            with col3:
-                st.subheader("Ratios")
-                v_percent = v / p * 100 if p != 0 else "undefined"
-                fm_percent = f / mq * 100 if mq != 0 else "undefined"
-                q0 = f / m if m != 0 else "undefined"
-                
-                if isinstance(v_percent, float):
-                    st.metric("V%", f"{v_percent:.1f}%")
-                else:
-                    st.metric("V%", v_percent)
-                
-                if isinstance(fm_percent, float):
-                    st.metric("FM", f"{fm_percent:.1f}%")
-                else:
-                    st.metric("FM", fm_percent)
-                
-                if isinstance(q0, float):
-                    st.metric("Q0", f"{q0:.1f}")
-                else:
-                    st.metric("Q0", q0)
+            display_basic_results(p, v, q, f, g)
     
     # T-STRAC タブ
     with tab2:
@@ -278,6 +293,28 @@ def main():
                 st.metric("MQK", f"{ck:.1f}")
                 st.metric("FK", f"{-fk:.1f}")  # 符号反転
                 st.metric("GK", f"{gk:.1f}")
+            
+            # H-STRAC計算後に、新しい値でBasic Calculationを実行
+            st.markdown("---")
+            
+            # 新しい値でBasic Calculationを実行
+            result_new = basic_calculation(p_new, v_new, q_new, f_new, g_new)
+            p_calc, v_calc, q_calc, f_calc, g_calc, m_calc, pq_calc, vq_calc, mq_calc = result_new
+            
+            # 結果を表示
+            display_basic_results(p_calc, v_calc, q_calc, f_calc, g_calc, 
+                                "Basic Calculation Results (using New Values)", show_ratios=False)
+            
+            # 入力値と計算値の比較を表示
+            st.subheader("Comparison: Input vs Calculated")
+            comparison_data = {
+                'Variable': ['P', 'V', 'Q', 'F', 'G'],
+                'Input (New)': [p_new, v_new, q_new, f_new, g_new],
+                'Calculated': [p_calc, v_calc, q_calc, f_calc, g_calc],
+                'Difference': [p_calc - p_new, v_calc - v_new, q_calc - q_new, f_calc - f_new, g_calc - g_new]
+            }
+            df_comparison = pd.DataFrame(comparison_data)
+            st.dataframe(df_comparison, use_container_width=True)
     
     # MQ-Strategy タブ
     with tab4:
