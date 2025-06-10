@@ -242,11 +242,11 @@ def main():
         
         with col1:
             st.subheader("Base Values")
-            p2 = st.number_input("P(base) =", value=st.session_state.current_values['p'], format="%.1f", step=1.0, key="h_p2")
-            v2 = st.number_input("V(base) =", value=st.session_state.current_values['v'], format="%.1f", step=1.0, key="h_v2")
-            q2 = st.number_input("Q(base) =", value=st.session_state.current_values['q'], format="%.1f", step=1.0, key="h_q2")
-            f2 = st.number_input("F(base) =", value=st.session_state.current_values['f'], format="%.1f", step=10.0, key="h_f2")
-            g2 = st.number_input("G(base) =", value=st.session_state.current_values['g'], format="%.1f", step=10.0, key="h_g2")
+            p2 = st.number_input("P(base) =", value=float(st.session_state.current_values['p']) if st.session_state.current_values['p'] != 0 else 0.0, format="%.1f", step=1.0, key="h_p2")
+            v2 = st.number_input("V(base) =", value=float(st.session_state.current_values['v']) if st.session_state.current_values['v'] != 0 else 0.0, format="%.1f", step=1.0, key="h_v2")
+            q2 = st.number_input("Q(base) =", value=float(st.session_state.current_values['q']) if st.session_state.current_values['q'] != 0 else 0.0, format="%.1f", step=1.0, key="h_q2")
+            f2 = st.number_input("F(base) =", value=float(st.session_state.current_values['f']) if st.session_state.current_values['f'] != 0 else 0.0, format="%.1f", step=10.0, key="h_f2")
+            g2 = st.number_input("G(base) =", value=float(st.session_state.current_values['g']) if st.session_state.current_values['g'] != 0 else 0.0, format="%.1f", step=10.0, key="h_g2")
         
         with col2:
             st.subheader("New Values")
