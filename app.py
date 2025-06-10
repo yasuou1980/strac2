@@ -5,7 +5,7 @@ import pandas as pd
 # ページ設定
 st.set_page_config(
     page_title="STRAC Calculator",
-    page_icon="🧮",
+    page_icon="🧮",  
     layout="wide"
 )
 
@@ -80,13 +80,13 @@ def main():
         col1, col2 = st.columns(2)
         
         with col1:
-            p_input = st.number_input("P =", value=None, format="%.4f", key="basic_p")
-            v_input = st.number_input("V =", value=None, format="%.4f", key="basic_v")
-            q_input = st.number_input("Q =", value=None, format="%.4f", key="basic_q")
+            p_input = st.number_input("P =", value=None, format="%.1f", key="basic_p")
+            v_input = st.number_input("V =", value=None, format="%.1f", key="basic_v")
+            q_input = st.number_input("Q =", value=None, format="%.1f", key="basic_q")
         
         with col2:
-            f_input = st.number_input("F =", value=None, format="%.4f", key="basic_f")
-            g_input = st.number_input("G =", value=None, format="%.4f", key="basic_g")
+            f_input = st.number_input("F =", value=None, format="%.1f", key="basic_f")
+            g_input = st.number_input("G =", value=None, format="%.1f", key="basic_g")
         
         if st.button("Calculate Basic", type="primary"):
             result = basic_calculation(p_input, v_input, q_input, f_input, g_input)
@@ -100,18 +100,18 @@ def main():
             
             with col1:
                 st.subheader("Primary Values")
-                st.metric("P", f"{p:.4f}")
-                st.metric("V", f"{v:.4f}")
-                st.metric("M", f"{m:.4f}")
-                st.metric("Q", f"{q:.4f}")
+                st.metric("P", f"{p:.1f}")
+                st.metric("V", f"{v:.1f}")
+                st.metric("M", f"{m:.1f}")
+                st.metric("Q", f"{q:.1f}")
             
             with col2:
                 st.subheader("Products") 
-                st.metric("PQ", f"{pq:.4f}")
-                st.metric("VQ", f"{vq:.4f}")
-                st.metric("MQ", f"{mq:.4f}")
-                st.metric("F", f"{f:.4f}")
-                st.metric("G", f"{g:.4f}")
+                st.metric("PQ", f"{pq:.1f}")
+                st.metric("VQ", f"{vq:.1f}")
+                st.metric("MQ", f"{mq:.1f}")
+                st.metric("F", f"{f:.1f}")
+                st.metric("G", f"{g:.1f}")
             
             with col3:
                 st.subheader("Ratios")
@@ -120,17 +120,17 @@ def main():
                 q0 = f / m if m != 0 else "undefined"
                 
                 if isinstance(v_percent, float):
-                    st.metric("V%", f"{v_percent:.2f}%")
+                    st.metric("V%", f"{v_percent:.1f}%")
                 else:
                     st.metric("V%", v_percent)
                 
                 if isinstance(fm_percent, float):
-                    st.metric("FM", f"{fm_percent:.2f}%")
+                    st.metric("FM", f"{fm_percent:.1f}%")
                 else:
                     st.metric("FM", fm_percent)
                 
                 if isinstance(q0, float):
-                    st.metric("Q0", f"{q0:.4f}")
+                    st.metric("Q0", f"{q0:.1f}")
                 else:
                     st.metric("Q0", q0)
     
@@ -146,13 +146,13 @@ def main():
             col1, col2 = st.columns(2)
             
             with col1:
-                pt = st.number_input("PT =", value=st.session_state.current_values['p'], format="%.4f", key="t_pt")
-                vt = st.number_input("VT =", value=st.session_state.current_values['v'], format="%.4f", key="t_vt")
-                qt = st.number_input("QT =", value=st.session_state.current_values['q'], format="%.4f", key="t_qt")
+                pt = st.number_input("PT =", value=st.session_state.current_values['p'], format="%.1f", key="t_pt")
+                vt = st.number_input("VT =", value=st.session_state.current_values['v'], format="%.1f", key="t_vt")
+                qt = st.number_input("QT =", value=st.session_state.current_values['q'], format="%.1f", key="t_qt")
             
             with col2:
-                ft = st.number_input("FT =", value=st.session_state.current_values['f'], format="%.4f", key="t_ft")
-                gt = st.number_input("GT =", value=st.session_state.current_values['g'], format="%.4f", key="t_gt")
+                ft = st.number_input("FT =", value=st.session_state.current_values['f'], format="%.1f", key="t_ft")
+                gt = st.number_input("GT =", value=st.session_state.current_values['g'], format="%.1f", key="t_gt")
             
             if st.button("Calculate T-STRAC", type="primary"):
                 # 差分計算
@@ -167,19 +167,19 @@ def main():
                 
                 with col1:
                     st.subheader("Target Values")
-                    st.metric("PT", f"{pt:.4f}")
-                    st.metric("VT", f"{vt:.4f}")
-                    st.metric("QT", f"{qt:.4f}")
-                    st.metric("FT", f"{ft:.4f}")
-                    st.metric("GT", f"{gt:.4f}")
+                    st.metric("PT", f"{pt:.1f}")
+                    st.metric("VT", f"{vt:.1f}")
+                    st.metric("QT", f"{qt:.1f}")
+                    st.metric("FT", f"{ft:.1f}")
+                    st.metric("GT", f"{gt:.1f}")
                 
                 with col2:
                     st.subheader("Differences")
-                    st.metric("DP", f"{dp:.4f}")
-                    st.metric("DV", f"{dv:.4f}")
-                    st.metric("DQ", f"{dq:.4f}")
-                    st.metric("DF", f"{df:.4f}")
-                    st.metric("DG", f"{dg:.4f}")
+                    st.metric("DP", f"{dp:.1f}")
+                    st.metric("DV", f"{dv:.1f}")
+                    st.metric("DQ", f"{dq:.1f}")
+                    st.metric("DF", f"{df:.1f}")
+                    st.metric("DG", f"{dg:.1f}")
                 
                 st.subheader("Percentage Changes")
                 col1, col2, col3, col4, col5 = st.columns(5)
@@ -187,35 +187,35 @@ def main():
                 with col1:
                     dp_pct = dp / p * 100 if p != 0 else "undefined"
                     if isinstance(dp_pct, float):
-                        st.metric("DP%", f"{dp_pct:.2f}%")
+                        st.metric("DP%", f"{dp_pct:.1f}%")
                     else:
                         st.metric("DP%", dp_pct)
                 
                 with col2:
                     dv_pct = dv / v * 100 if v != 0 else "undefined"
                     if isinstance(dv_pct, float):
-                        st.metric("DV%", f"{dv_pct:.2f}%")
+                        st.metric("DV%", f"{dv_pct:.1f}%")
                     else:
                         st.metric("DV%", dv_pct)
                 
                 with col3:
                     dq_pct = dq / q * 100 if q != 0 else "undefined"
                     if isinstance(dq_pct, float):
-                        st.metric("DQ%", f"{dq_pct:.2f}%")
+                        st.metric("DQ%", f"{dq_pct:.1f}%")
                     else:
                         st.metric("DQ%", dq_pct)
                 
                 with col4:
                     df_pct = df / f * 100 if f != 0 else "undefined"
                     if isinstance(df_pct, float):
-                        st.metric("DF%", f"{df_pct:.2f}%")
+                        st.metric("DF%", f"{df_pct:.1f}%")
                     else:
                         st.metric("DF%", df_pct)
                 
                 with col5:
                     dg_pct = dg / g * 100 if g != 0 else "undefined"
                     if isinstance(dg_pct, float):
-                        st.metric("DG%", f"{dg_pct:.2f}%")
+                        st.metric("DG%", f"{dg_pct:.1f}%")
                     else:
                         st.metric("DG%", dg_pct)
     
@@ -227,19 +227,19 @@ def main():
         
         with col1:
             st.subheader("Base Values")
-            p2 = st.number_input("P(base) =", value=0.0, format="%.4f", key="h_p2")
-            v2 = st.number_input("V(base) =", value=0.0, format="%.4f", key="h_v2")
-            q2 = st.number_input("Q(base) =", value=0.0, format="%.4f", key="h_q2")
-            f2 = st.number_input("F(base) =", value=0.0, format="%.4f", key="h_f2")
-            g2 = st.number_input("G(base) =", value=0.0, format="%.4f", key="h_g2")
+            p2 = st.number_input("P(base) =", value=0.0, format="%.1f", key="h_p2")
+            v2 = st.number_input("V(base) =", value=0.0, format="%.1f", key="h_v2")
+            q2 = st.number_input("Q(base) =", value=0.0, format="%.1f", key="h_q2")
+            f2 = st.number_input("F(base) =", value=0.0, format="%.1f", key="h_f2")
+            g2 = st.number_input("G(base) =", value=0.0, format="%.1f", key="h_g2")
         
         with col2:
             st.subheader("New Values")
-            p_new = st.number_input("P(new) =", value=0.0, format="%.4f", key="h_p_new")
-            v_new = st.number_input("V(new) =", value=0.0, format="%.4f", key="h_v_new")
-            q_new = st.number_input("Q(new) =", value=0.0, format="%.4f", key="h_q_new")
-            f_new = st.number_input("F(new) =", value=0.0, format="%.4f", key="h_f_new")
-            g_new = st.number_input("G(new) =", value=0.0, format="%.4f", key="h_g_new")
+            p_new = st.number_input("P(new) =", value=0.0, format="%.1f", key="h_p_new")
+            v_new = st.number_input("V(new) =", value=0.0, format="%.1f", key="h_v_new")
+            q_new = st.number_input("Q(new) =", value=0.0, format="%.1f", key="h_q_new")
+            f_new = st.number_input("F(new) =", value=0.0, format="%.1f", key="h_f_new")
+            g_new = st.number_input("G(new) =", value=0.0, format="%.1f", key="h_g_new")
         
         if st.button("Calculate H-STRAC", type="primary"):
             # 計算
@@ -267,17 +267,17 @@ def main():
             col1, col2 = st.columns(2)
             
             with col1:
-                st.metric("PK", f"{pk:.4f}")
-                st.metric("VK", f"{-vk:.4f}")  # 符号反転
-                st.metric("MK", f"{mk:.4f}")
-                st.metric("QK", f"{qk:.4f}")
+                st.metric("PK", f"{pk:.1f}")
+                st.metric("VK", f"{-vk:.1f}")  # 符号反転
+                st.metric("MK", f"{mk:.1f}")
+                st.metric("QK", f"{qk:.1f}")
             
             with col2:
-                st.metric("PQK", f"{ak:.4f}")
-                st.metric("VQK", f"{-bk:.4f}")  # 符号反転
-                st.metric("MQK", f"{ck:.4f}")
-                st.metric("FK", f"{-fk:.4f}")  # 符号反転
-                st.metric("GK", f"{gk:.4f}")
+                st.metric("PQK", f"{ak:.1f}")
+                st.metric("VQK", f"{-bk:.1f}")  # 符号反転
+                st.metric("MQK", f"{ck:.1f}")
+                st.metric("FK", f"{-fk:.1f}")  # 符号反転
+                st.metric("GK", f"{gk:.1f}")
     
     # MQ-Strategy タブ
     with tab4:
@@ -286,14 +286,14 @@ def main():
         col1, col2 = st.columns(2)
         
         with col1:
-            mq = st.number_input("MQ =", value=0.0, format="%.4f", key="mq_value")
-            v_mq = st.number_input("V =", value=0.0, format="%.4f", key="mq_v")
+            mq = st.number_input("MQ =", value=0.0, format="%.1f", key="mq_value")
+            v_mq = st.number_input("V =", value=0.0, format="%.1f", key="mq_v")
             strategy = st.selectbox("Strategy", ["PP (P-based)", "QQ (Q-based)"])
         
         with col2:
-            start_val = st.number_input("Start value", value=0.0, format="%.4f", key="mq_start")
-            end_val = st.number_input("End value", value=10.0, format="%.4f", key="mq_end")
-            step_val = st.number_input("Step", value=1.0, format="%.4f", key="mq_step")
+            start_val = st.number_input("Start value", value=0.0, format="%.1f", key="mq_start")
+            end_val = st.number_input("End value", value=10.0, format="%.1f", key="mq_end")
+            step_val = st.number_input("Step", value=1.0, format="%.1f", key="mq_step")
         
         if st.button("Calculate MQ-Strategy", type="primary"):
             if step_val == 0:
@@ -309,8 +309,8 @@ def main():
                         q = mq / m if m != 0 else 0
                         q = round(q * 10) / 10
                         results.append({
-                            'P': p, 'V': v_mq, 'M': m, 'Q': q,
-                            'PQ': p * q, 'VQ': v_mq * q, 'MQ': m * q
+                            'P': round(p, 1), 'V': round(v_mq, 1), 'M': round(m, 1), 'Q': round(q, 1),
+                            'PQ': round(p * q, 1), 'VQ': round(v_mq * q, 1), 'MQ': round(m * q, 1)
                         })
                         p += step_val
                         
@@ -325,8 +325,8 @@ def main():
                         m = round(m * 10) / 10
                         p = v_mq + m
                         results.append({
-                            'P': p, 'V': v_mq, 'M': m, 'Q': q,
-                            'PQ': p * q, 'VQ': v_mq * q, 'MQ': m * q
+                            'P': round(p, 1), 'V': round(v_mq, 1), 'M': round(m, 1), 'Q': round(q, 1),
+                            'PQ': round(p * q, 1), 'VQ': round(v_mq * q, 1), 'MQ': round(m * q, 1)
                         })
                         q += step_val
                         
