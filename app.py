@@ -80,13 +80,13 @@ def main():
         col1, col2 = st.columns(2)
         
         with col1:
-            p_input = st.number_input("P =", value=None, format="%.1f", key="basic_p")
-            v_input = st.number_input("V =", value=None, format="%.1f", key="basic_v")
-            q_input = st.number_input("Q =", value=None, format="%.1f", key="basic_q")
+            p_input = st.number_input("P =", value=None, format="%.1f", step=1.0, key="basic_p")
+            v_input = st.number_input("V =", value=None, format="%.1f", step=1.0, key="basic_v")
+            q_input = st.number_input("Q =", value=None, format="%.1f", step=1.0, key="basic_q")
         
         with col2:
-            f_input = st.number_input("F =", value=None, format="%.1f", key="basic_f")
-            g_input = st.number_input("G =", value=None, format="%.1f", key="basic_g")
+            f_input = st.number_input("F =", value=None, format="%.1f", step=10.0, key="basic_f")
+            g_input = st.number_input("G =", value=None, format="%.1f", step=10.0, key="basic_g")
         
         if st.button("Calculate Basic", type="primary"):
             result = basic_calculation(p_input, v_input, q_input, f_input, g_input)
@@ -146,13 +146,13 @@ def main():
             col1, col2 = st.columns(2)
             
             with col1:
-                pt = st.number_input("PT =", value=st.session_state.current_values['p'], format="%.1f", key="t_pt")
-                vt = st.number_input("VT =", value=st.session_state.current_values['v'], format="%.1f", key="t_vt")
-                qt = st.number_input("QT =", value=st.session_state.current_values['q'], format="%.1f", key="t_qt")
+                pt = st.number_input("PT =", value=st.session_state.current_values['p'], format="%.1f", step=1.0, key="t_pt")
+                vt = st.number_input("VT =", value=st.session_state.current_values['v'], format="%.1f", step=1.0, key="t_vt")
+                qt = st.number_input("QT =", value=st.session_state.current_values['q'], format="%.1f", step=1.0, key="t_qt")
             
             with col2:
-                ft = st.number_input("FT =", value=st.session_state.current_values['f'], format="%.1f", key="t_ft")
-                gt = st.number_input("GT =", value=st.session_state.current_values['g'], format="%.1f", key="t_gt")
+                ft = st.number_input("FT =", value=st.session_state.current_values['f'], format="%.1f", step=10.0, key="t_ft")
+                gt = st.number_input("GT =", value=st.session_state.current_values['g'], format="%.1f", step=10.0, key="t_gt")
             
             if st.button("Calculate T-STRAC", type="primary"):
                 # 差分計算
@@ -227,19 +227,19 @@ def main():
         
         with col1:
             st.subheader("Base Values")
-            p2 = st.number_input("P(base) =", value=0.0, format="%.1f", key="h_p2")
-            v2 = st.number_input("V(base) =", value=0.0, format="%.1f", key="h_v2")
-            q2 = st.number_input("Q(base) =", value=0.0, format="%.1f", key="h_q2")
-            f2 = st.number_input("F(base) =", value=0.0, format="%.1f", key="h_f2")
-            g2 = st.number_input("G(base) =", value=0.0, format="%.1f", key="h_g2")
+            p2 = st.number_input("P(base) =", value=0.0, format="%.1f", step=1.0, key="h_p2")
+            v2 = st.number_input("V(base) =", value=0.0, format="%.1f", step=1.0, key="h_v2")
+            q2 = st.number_input("Q(base) =", value=0.0, format="%.1f", step=1.0, key="h_q2")
+            f2 = st.number_input("F(base) =", value=0.0, format="%.1f", step=10.0, key="h_f2")
+            g2 = st.number_input("G(base) =", value=0.0, format="%.1f", step=10.0, key="h_g2")
         
         with col2:
             st.subheader("New Values")
-            p_new = st.number_input("P(new) =", value=0.0, format="%.1f", key="h_p_new")
-            v_new = st.number_input("V(new) =", value=0.0, format="%.1f", key="h_v_new")
-            q_new = st.number_input("Q(new) =", value=0.0, format="%.1f", key="h_q_new")
-            f_new = st.number_input("F(new) =", value=0.0, format="%.1f", key="h_f_new")
-            g_new = st.number_input("G(new) =", value=0.0, format="%.1f", key="h_g_new")
+            p_new = st.number_input("P(new) =", value=0.0, format="%.1f", step=1.0, key="h_p_new")
+            v_new = st.number_input("V(new) =", value=0.0, format="%.1f", step=1.0, key="h_v_new")
+            q_new = st.number_input("Q(new) =", value=0.0, format="%.1f", step=1.0, key="h_q_new")
+            f_new = st.number_input("F(new) =", value=0.0, format="%.1f", step=10.0, key="h_f_new")
+            g_new = st.number_input("G(new) =", value=0.0, format="%.1f", step=10.0, key="h_g_new")
         
         if st.button("Calculate H-STRAC", type="primary"):
             # 計算
@@ -286,8 +286,8 @@ def main():
         col1, col2 = st.columns(2)
         
         with col1:
-            mq = st.number_input("MQ =", value=0.0, format="%.1f", key="mq_value")
-            v_mq = st.number_input("V =", value=0.0, format="%.1f", key="mq_v")
+            mq = st.number_input("MQ =", value=0.0, format="%.1f", step=10.0, key="mq_value")
+            v_mq = st.number_input("V =", value=0.0, format="%.1f", step=1.0, key="mq_v")
             strategy = st.selectbox("Strategy", ["PP (P-based)", "QQ (Q-based)"])
         
         with col2:
