@@ -1,5 +1,4 @@
 import streamlit as st
-import math
 import pandas as pd
 
 # ページ設定
@@ -15,39 +14,40 @@ def initialize_session_state():
         st.session_state.current_values = {'p': 0, 'v': 0, 'q': 0, 'f': 0, 'g': 0}
 
 def basic_calculation(p, v, q, f, g):
-    """基本計算ロジック"""
-    PI = math.pi
-    
-    # None を PI で置き換える
-    p = PI if p is None else p
-    v = PI if v is None else v
-    q = PI if q is None else q
-    f = PI if f is None else f
-    g = PI if g is None else g
-    
-    # 計算ロジック
-    if p == PI:
+    """基本計算ロジック
+
+    未知数(None)は1つまで。複数の場合はエラーを返す。
+    STRAC式: P*Q = V*Q + F + G → (P-V)*Q = F + G → M*Q = F + G
+    """
+    # None の数をチェック
+    inputs = {'P': p, 'V': v, 'Q': q, 'F': f, 'G': g}
+    none_count = sum(1 for val in inputs.values() if val is None)
+
+    if none_count > 1:
+        none_names = [name for name, val in inputs.items() if val is None]
+        raise ValueError(f"空欄は1つまでにしてください。現在 {', '.join(none_names)} が空欄です。")
+
+    if none_count == 0:
+        # 全て入力済み：そのまま使用
+        pass
+    elif p is None:
         if q != 0:
             p = (v * q + f + g) / q
         else:
             p = 0
-    
-    if v == PI:
+    elif v is None:
         if q != 0:
             v = (p * q - f - g) / q
         else:
             v = 0
-    
-    if q == PI:
+    elif q is None:
         if (p - v) != 0:
             q = (f + g) / (p - v)
         else:
             q = 0
-    
-    if f == PI:
+    elif f is None:
         f = p * q - v * q - g
-    
-    if g == PI:
+    elif g is None:
         g = p * q - v * q - f
     
     m = p - v
@@ -140,14 +140,17 @@ def main():
             g_input = st.number_input("G =", value=None, format="%.1f", step=10.0, key="basic_g")
         
         if st.button("Calculate Basic", type="primary"):
-            result = basic_calculation(p_input, v_input, q_input, f_input, g_input)
-            p, v, q, f, g, m, pq, vq, mq = result
-            
-            # 結果を保存
-            st.session_state.current_values = {'p': p, 'v': v, 'q': q, 'f': f, 'g': g}
-            
-            # 結果表示
-            display_basic_results(p, v, q, f, g)
+            try:
+                result = basic_calculation(p_input, v_input, q_input, f_input, g_input)
+                p, v, q, f, g, m, pq, vq, mq = result
+
+                # 結果を保存
+                st.session_state.current_values = {'p': p, 'v': v, 'q': q, 'f': f, 'g': g}
+
+                # 結果表示
+                display_basic_results(p, v, q, f, g)
+            except ValueError as e:
+                st.error(str(e))
     
     # T-STRAC タブ
     with tab2:
@@ -276,8 +279,18 @@ def main():
             bk = vq_new - vq2
             ck = mq_new - mq2
             fk = f_new - f2
-            gk = ck - fk
-            
+            gk = g_new - g2
+
+            # 入力値の整合性チェック: MQ = F + G が成り立つか
+            mq2_check = abs(mq2 - (f2 + g2))
+            mq_new_check = abs(mq_new - (f_new + g_new))
+            if mq2_check > 0.1 or mq_new_check > 0.1:
+                st.warning(
+                    f"⚠️ 入力値に不整合があります (MQ ≠ F + G)。"
+                    f" Base: MQ={mq2:.1f}, F+G={f2 + g2:.1f} (差={mq2_check:.1f})"
+                    f" / New: MQ={mq_new:.1f}, F+G={f_new + g_new:.1f} (差={mq_new_check:.1f})"
+                )
+
             st.subheader("H-STRAC Results")
             col1, col2 = st.columns(2)
             
@@ -347,10 +360,14 @@ def main():
             else:
                 results = []
                 
+                # ステップ数を算出してインデックスベースでループ（浮動小数点誤差防止）
+                n_steps = int(round(abs(end_val - start_val) / abs(step_val))) + 1
+                n_steps = min(n_steps, 101)  # 無限ループ防止
+
                 if "PP" in strategy:
                     # P-based strategy
-                    p = start_val
-                    while (step_val > 0 and p <= end_val) or (step_val < 0 and p >= end_val):
+                    for i in range(n_steps):
+                        p = start_val + i * step_val
                         m = p - v_mq
                         q = mq / m if m != 0 else 0
                         q = round(q * 10) / 10
@@ -358,15 +375,10 @@ def main():
                             'P': round(p, 1), 'V': round(v_mq, 1), 'M': round(m, 1), 'Q': round(q, 1),
                             'PQ': round(p * q, 1), 'VQ': round(v_mq * q, 1), 'MQ': round(m * q, 1)
                         })
-                        p += step_val
-                        
-                        # 無限ループを防ぐ
-                        if len(results) > 100:
-                            break
                 else:
                     # Q-based strategy
-                    q = start_val
-                    while (step_val > 0 and q <= end_val) or (step_val < 0 and q >= end_val):
+                    for i in range(n_steps):
+                        q = start_val + i * step_val
                         m = mq / q if q != 0 else 0
                         m = round(m * 10) / 10
                         p = v_mq + m
@@ -374,11 +386,6 @@ def main():
                             'P': round(p, 1), 'V': round(v_mq, 1), 'M': round(m, 1), 'Q': round(q, 1),
                             'PQ': round(p * q, 1), 'VQ': round(v_mq * q, 1), 'MQ': round(m * q, 1)
                         })
-                        q += step_val
-                        
-                        # 無限ループを防ぐ
-                        if len(results) > 100:
-                            break
                 
                 if results:
                     df = pd.DataFrame(results)
