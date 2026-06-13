@@ -7,5 +7,4 @@ textColor = "#262730"
 [server]
 headless = true
 port = 8501
-enableCORS = false
-enableXsrfProtection = false
+# CORS / XSRF 保護はデフォルト(有効)のまま。公開デプロイ時の CSRF 対策として無効化しない。
